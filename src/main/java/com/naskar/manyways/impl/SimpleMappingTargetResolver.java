@@ -36,7 +36,7 @@ public class SimpleMappingTargetResolver implements TargetResolver {
 	
 	@Override
 	public String resolve(HttpServletRequest req, HttpServletResponse res) {
-		return rewriteTarget(req);
+		return rewriteTarget(req); 
 	}
 	
 	protected String rewriteTarget(HttpServletRequest request) {

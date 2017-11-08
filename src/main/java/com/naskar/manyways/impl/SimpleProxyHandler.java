@@ -29,28 +29,31 @@ public class SimpleProxyHandler implements ProxyHandler {
 	public void handle(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		
 		String target = targetResolver.resolve(req, res);
-		if(target != null) {
-			HttpUriRequest request = newRequest(target, req, res);
-			
-			copyRequestHeaders(req, request);
-			
-			HttpClientBuilder builder = HttpClientBuilder.create();
-			CloseableHttpClient client = builder.build();
-			
-			try {
-				handleResponse(client.execute(request), res);
-			} finally {
-				client.close();
-			}
-			
-			/*
-			proxyRequest.header(HttpHeader.VIA, "http/1.1 " + getViaHost());
-			proxyRequest.header(HttpHeader.X_FORWARDED_FOR, clientRequest.getRemoteAddr());
-	        proxyRequest.header(HttpHeader.X_FORWARDED_PROTO, clientRequest.getScheme());
-	        proxyRequest.header(HttpHeader.X_FORWARDED_HOST, clientRequest.getHeader(HttpHeader.HOST.asString()));
-	        proxyRequest.header(HttpHeader.X_FORWARDED_SERVER, clientRequest.getLocalName());
-			*/
+		if(target == null) {
+			res.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return;
 		}
+		
+		HttpUriRequest request = newRequest(target, req, res);
+		
+		copyRequestHeaders(req, request);
+		
+		HttpClientBuilder builder = HttpClientBuilder.create();
+		CloseableHttpClient client = builder.build();
+		
+		try {
+			handleResponse(client.execute(request), res);
+		} finally {
+			client.close();
+		}
+		
+		/*
+		proxyRequest.header(HttpHeader.VIA, "http/1.1 " + getViaHost());
+		proxyRequest.header(HttpHeader.X_FORWARDED_FOR, clientRequest.getRemoteAddr());
+        proxyRequest.header(HttpHeader.X_FORWARDED_PROTO, clientRequest.getScheme());
+        proxyRequest.header(HttpHeader.X_FORWARDED_HOST, clientRequest.getHeader(HttpHeader.HOST.asString()));
+        proxyRequest.header(HttpHeader.X_FORWARDED_SERVER, clientRequest.getLocalName());
+		*/
 		
 	}
 
@@ -61,7 +64,7 @@ public class SimpleProxyHandler implements ProxyHandler {
 			response.close();
 		}
 	}
-
+	
 	private void copyRequestHeaders(HttpServletRequest req, HttpRequest request) {
 		Enumeration<String> names = req.getHeaderNames();
 		for(; names.hasMoreElements(); ) {
