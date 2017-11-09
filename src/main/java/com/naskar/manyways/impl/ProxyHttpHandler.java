@@ -3,6 +3,7 @@ package com.naskar.manyways.impl;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Enumeration;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,8 +18,9 @@ import org.apache.http.impl.client.HttpClientBuilder;
 
 import com.naskar.manyways.Chain;
 import com.naskar.manyways.Handler;
+import com.naskar.manyways.config.Configurable;
 
-public class ProxyHttpHandler implements Handler {
+public class ProxyHttpHandler implements Handler, Configurable {
 	
 	private String prefix;
 	private String target;
@@ -31,6 +33,12 @@ public class ProxyHttpHandler implements Handler {
 	public ProxyHttpHandler target(String value) {
 		this.target = value;
 		return this;
+	}
+	
+	@Override
+	public void configureParameters(Map<String, String> params) {
+		prefix(params.get("prefix"));
+		target(params.get("target"));
 	}
 
 	@Override
@@ -49,7 +57,7 @@ public class ProxyHttpHandler implements Handler {
 			client.close();
 		}
 		
-		/*
+		/* TODO: proxy
 		proxyRequest.header(HttpHeader.VIA, "http/1.1 " + getViaHost());
 		proxyRequest.header(HttpHeader.X_FORWARDED_FOR, clientRequest.getRemoteAddr());
         proxyRequest.header(HttpHeader.X_FORWARDED_PROTO, clientRequest.getScheme());
@@ -111,7 +119,7 @@ public class ProxyHttpHandler implements Handler {
 
 		URI rewrittenURI = URI.create(uri.toString()).normalize();
 
-		/*
+		/* TODO: 
 		if (!validateDestination(rewrittenURI.getHost(), rewrittenURI.getPort())) {
 			return null;
 		}
