@@ -35,14 +35,4 @@ public class ChainList implements Chain {
 		}
 	}
 	
-	@Override
-	public HttpServletRequest request() {
-		return req;
-	}
-	
-	@Override
-	public HttpServletResponse response() {
-		return res;
-	}
-
 }

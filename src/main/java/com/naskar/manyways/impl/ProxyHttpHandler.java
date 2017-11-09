@@ -65,6 +65,7 @@ public class ProxyHttpHandler implements Handler, Configurable {
         proxyRequest.header(HttpHeader.X_FORWARDED_SERVER, clientRequest.getLocalName());
 		*/
 		
+		chain.next();
 	}
 
 	private void handleResponse(CloseableHttpResponse response, HttpServletResponse res) throws IOException {
