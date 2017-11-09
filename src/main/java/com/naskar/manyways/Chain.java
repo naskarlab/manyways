@@ -3,8 +3,12 @@ package com.naskar.manyways;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public interface ProxyHandler {
+public interface Chain {
 	
-	void handle(HttpServletRequest req, HttpServletResponse res) throws Exception;
+	HttpServletRequest request();
+	
+	HttpServletResponse response();
+	
+	void next();
 
 }

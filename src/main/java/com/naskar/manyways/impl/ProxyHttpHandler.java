@@ -1,6 +1,7 @@
 package com.naskar.manyways.impl;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,27 +15,28 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-import com.naskar.manyways.ProxyHandler;
-import com.naskar.manyways.TargetResolver;
+import com.naskar.manyways.Chain;
+import com.naskar.manyways.Handler;
 
-public class SimpleProxyHandler implements ProxyHandler {
+public class ProxyHttpHandler implements Handler {
 	
-	private TargetResolver targetResolver;
+	private String prefix;
+	private String target;
+	
+	public ProxyHttpHandler prefix(String value) {
+		this.prefix = value;
+		return this;
+	}
 
-	public SimpleProxyHandler(TargetResolver targetResolver) {
-		this.targetResolver = targetResolver;
+	public ProxyHttpHandler target(String value) {
+		this.target = value;
+		return this;
 	}
 
 	@Override
-	public void handle(HttpServletRequest req, HttpServletResponse res) throws Exception {
+	public void handle(Chain chain, HttpServletRequest req, HttpServletResponse res) throws Exception {
 		
-		String target = targetResolver.resolve(req, res);
-		if(target == null) {
-			res.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			return;
-		}
-		
-		HttpUriRequest request = newRequest(target, req, res);
+		HttpUriRequest request = newRequest(rewrite(req, prefix, target), req, res);
 		
 		copyRequestHeaders(req, request);
 		
@@ -86,6 +88,36 @@ public class SimpleProxyHandler implements ProxyHandler {
 			default:
 				throw new RuntimeException("NotImplementedYet");
 		}
+	}
+	
+	private static String rewrite(HttpServletRequest request, String prefix, String proxyTo) {
+		
+		String path = request.getRequestURI();
+
+		StringBuilder uri = new StringBuilder(proxyTo);
+
+		String rest = path.substring((request.getServletPath() + prefix).length());
+		if(!rest.isEmpty()) {
+			uri.append(rest);
+		}
+
+		String query = request.getQueryString();
+		if (query != null) {
+			String separator = "://";
+			if (uri.indexOf("/", uri.indexOf(separator) + separator.length()) < 0)
+				uri.append("/");
+			uri.append("?").append(query);
+		}
+
+		URI rewrittenURI = URI.create(uri.toString()).normalize();
+
+		/*
+		if (!validateDestination(rewrittenURI.getHost(), rewrittenURI.getPort())) {
+			return null;
+		}
+		*/
+
+		return rewrittenURI.toString();
 	}
 	
 }

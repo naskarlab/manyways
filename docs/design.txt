@@ -1,0 +1,71 @@
+# manyways-conf.json
+{
+	handlers: [
+		{
+			type: "stat",
+			params: {
+				url: "http://apicatalog/stat"
+			}
+		},
+		{
+			type: "log", // "LogFilter"
+			params: {
+			}
+		}
+	],
+	ways: [
+		{
+			type: "mapping",
+			params: {
+				path: "/app",
+				handlers: [ // chain 
+				]
+			}
+		},
+		{
+			type: "discovery",
+			params: {
+				path: "/api"
+				url: "http://apicatalog/discovery"
+			}
+		},
+	]
+}
+
+
+http://apicatalog/discovery
+request:
+	{
+		uri: "/api",
+		headers: {
+			X-Request-Ajax: ["true"]
+		},
+		params: {
+			
+		}
+	}
+response:
+	{
+		handlers: [ // chain 
+			{
+				type: "oauth2",
+				params: {
+					token_generation: http://localhost:8080/token
+					token_validation: http://localhost:8080/validateToken
+				}
+			},
+			{
+				type: "proxy_http"
+				params: {
+					target: "http://otherserver:8080/account"
+				}
+			},
+			OU
+			{
+				type: "proxy_ajp"
+				params: {
+					target: "http://otherserver:8009/account"
+				}
+			}
+		]
+	}
