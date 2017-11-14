@@ -23,6 +23,7 @@ import com.naskar.manyways.impl.DefaultManyWayExecutor;
 public class EmbeddedServerTestBase {
 	
 	private static final String serverUrl = "http://localhost:9021";
+	private static final String baseDir = EmbeddedServerTestBase.class.getResource("/").getPath().substring(1);
 	
 	private static Tomcat tomcat;
 	private static Context ctx;
@@ -96,7 +97,7 @@ public class EmbeddedServerTestBase {
 	
 	protected String readFile(String filename) {
 		try {
-			return new String(Files.readAllBytes(Paths.get(filename)));
+			return new String(Files.readAllBytes(Paths.get(baseDir + filename)));
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}

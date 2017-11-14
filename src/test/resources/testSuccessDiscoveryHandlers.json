@@ -4,7 +4,7 @@
 			"type": "proxy_http",
 			"params": {
 				"prefix": "/api",
-				"target": "/target/api"
+				"target": "http://localhost:9021/target/api"
 			}
 		}
 	]

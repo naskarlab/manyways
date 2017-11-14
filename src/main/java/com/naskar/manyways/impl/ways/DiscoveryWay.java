@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
@@ -61,7 +62,15 @@ public class DiscoveryWay implements Way {
 			
 			String json = null;
 			try {
-				json = handleResponse(client.execute(factory.create(req, "", url)));
+				
+				HttpUriRequest request = factory.create(req, "", url);
+				
+				request.addHeader("X-Gateway-Url", req.getRequestURL().toString());
+				
+				// TODO: auth discovery
+				
+				json = handleResponse(client.execute(request));
+				
 			} finally {
 				client.close();
 			}

@@ -21,6 +21,7 @@ public class HandlersConfig {
 		return handlers;
 	}
 
+	@SuppressWarnings("unchecked")
 	private Handler createHandler(Map<String, Object> m) {
 		Handler h = null;
 		
@@ -33,7 +34,7 @@ public class HandlersConfig {
 		}
 		
 		if(h instanceof Configurable) {
-			((Configurable)h).configureParameters(m);
+			((Configurable)h).configureParameters((Map<String, Object>)m.get("params"));
 		}
 		
 		return h;

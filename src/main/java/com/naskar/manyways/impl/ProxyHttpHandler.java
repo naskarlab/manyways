@@ -20,9 +20,11 @@ public class ProxyHttpHandler implements Handler, Configurable {
 	private String target;
 	
 	private HttpRequestFactory factory;
+	private HttpClientBuilder builder;
 	
 	public ProxyHttpHandler() {
 		this.factory = new HttpRequestFactory();
+		this.builder = HttpClientBuilder.create();
 	}
 	
 	public ProxyHttpHandler prefix(String value) {
@@ -44,7 +46,6 @@ public class ProxyHttpHandler implements Handler, Configurable {
 	@Override
 	public void handle(Chain chain, HttpServletRequest req, HttpServletResponse res) throws Exception {
 		
-		HttpClientBuilder builder = HttpClientBuilder.create();
 		CloseableHttpClient client = builder.build();
 		
 		try {
