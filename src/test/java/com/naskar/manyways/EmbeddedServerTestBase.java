@@ -61,7 +61,7 @@ public class EmbeddedServerTestBase {
 	}
 	
 	protected void createServlet(String path, final BiConsumer<HttpServletRequest, HttpServletResponse> call) {
-        Tomcat.addServlet(ctx, "target-" + path.hashCode(), new HttpServlet() {
+        Tomcat.addServlet(ctx, "target-" + System.nanoTime() + "-" + call.hashCode(), new HttpServlet() {
         	
 			private static final long serialVersionUID = 1L;
 
