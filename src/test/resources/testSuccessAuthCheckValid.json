@@ -1,0 +1,8 @@
+{
+	"valid": {
+		"header": {
+			"X-User-Id": "rafael",
+			"X-User-Roles": "1;2;3;"
+		}
+	}
+}

@@ -1,4 +1,4 @@
-package com.naskar.manyways;
+package com.naskar.manyways.base;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +18,7 @@ import org.apache.catalina.startup.Tomcat;
 import org.junit.AfterClass;
 import org.junit.Before;
 
+import com.naskar.manyways.ManyWay;
 import com.naskar.manyways.impl.DefaultManyWayExecutor;
 
 public class EmbeddedServerTestBase {
@@ -78,15 +79,19 @@ public class EmbeddedServerTestBase {
 	
 	protected void createServlet(String path, String expected) {
 		createServlet(path, (req, resp) -> {
-			try {
-				Writer w = resp.getWriter();
-			    w.write(expected);
-			    w.flush();
-			    w.close();
-			} catch(Exception e) {
-				throw new RuntimeException(e);
-			}
+			write(resp, expected);
 		});
+	}
+
+	protected void write(HttpServletResponse resp, String expected) {
+		try {
+			Writer w = resp.getWriter();
+		    w.write(expected);
+		    w.flush();
+		    w.close();
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	protected void createServlet(String path, ManyWay manyWay) {

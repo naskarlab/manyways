@@ -63,9 +63,9 @@ public class DiscoveryWay implements Way {
 			String json = null;
 			try {
 				
-				HttpUriRequest request = factory.create(req, "", url);
+				HttpUriRequest request = factory.create(null, req, "", url);
 				
-				request.addHeader("X-Gateway-Url", req.getRequestURL().toString());
+				request.addHeader("X-Gateway-URL", req.getRequestURL().toString());
 				
 				// TODO: auth discovery
 				

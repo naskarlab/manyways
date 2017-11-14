@@ -1,0 +1,5 @@
+{
+	"invalid": {
+		"redirect": "http://localhost:9021/auth/login"
+	}
+}

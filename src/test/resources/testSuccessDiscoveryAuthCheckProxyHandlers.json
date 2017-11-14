@@ -1,0 +1,17 @@
+{
+	"handlers": [
+		{
+			"type": "auth_check",
+			"params": {
+				"url": "http://localhost:9021/target/auth/validate"
+			}
+		},
+		{
+			"type": "proxy_http",
+			"params": {
+				"prefix": "/api",
+				"target": "http://localhost:9021/target/api"
+			}
+		}
+	]
+}

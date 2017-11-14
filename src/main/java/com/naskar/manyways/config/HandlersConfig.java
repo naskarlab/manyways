@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.naskar.manyways.Handler;
-import com.naskar.manyways.impl.ProxyHttpHandler;
+import com.naskar.manyways.impl.handlers.AuthCheckHandler;
+import com.naskar.manyways.impl.handlers.ProxyHttpHandler;
 
 public class HandlersConfig {
 	
@@ -23,11 +24,16 @@ public class HandlersConfig {
 
 	@SuppressWarnings("unchecked")
 	private Handler createHandler(Map<String, Object> m) {
+		
+		// TODO: criar mapping handlers
 		Handler h = null;
 		
 		switch((String)m.get("type")) {
 			case "proxy_http":
 				h = new ProxyHttpHandler();
+				break;
+			case "auth_check":
+				h = new AuthCheckHandler();
 				break;
 			default:
 				throw new RuntimeException("OperationNotSupportedException");

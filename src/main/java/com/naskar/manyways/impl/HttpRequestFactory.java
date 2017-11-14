@@ -1,25 +1,26 @@
 package com.naskar.manyways.impl;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.Enumeration;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpRequest;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 
+import com.naskar.manyways.Chain;
+
 public class HttpRequestFactory {
 	
-	public HttpUriRequest create(HttpServletRequest req, String prefix, String target) throws Exception {
+	public HttpUriRequest create(Chain chain, HttpServletRequest req, String prefix, String target) throws Exception {
 		
 		HttpUriRequest request = newRequest(rewrite(req, prefix, target), req);
 		
 		copyRequestHeaders(req, request);
+		copyChainHeaders(chain, request);
 				
 		/* TODO: proxy
 		proxyRequest.header(HttpHeader.VIA, "http/1.1 " + getViaHost());
@@ -32,14 +33,6 @@ public class HttpRequestFactory {
 		return request;
 	}
 
-	protected void handleResponse(CloseableHttpResponse response, HttpServletResponse res) throws IOException {
-		try {
-			response.getEntity().writeTo(res.getOutputStream());
-		} finally {
-			response.close();
-		}
-	}
-	
 	protected void copyRequestHeaders(HttpServletRequest req, HttpRequest request) {
 		Enumeration<String> names = req.getHeaderNames();
 		for(;names.hasMoreElements();) {
@@ -48,6 +41,14 @@ public class HttpRequestFactory {
 			Enumeration<String> values = req.getHeaders(name);
 			for(; values.hasMoreElements(); ) {
 				request.addHeader(name, values.nextElement());
+			}
+		}
+	}
+	
+	private void copyChainHeaders(Chain chain, HttpUriRequest request) {
+		if(chain != null) {
+			for(Entry<String, Object> e : chain.getHeaderMap().entrySet()) {
+				request.addHeader(e.getKey(), e.getValue().toString());
 			}
 		}
 	}

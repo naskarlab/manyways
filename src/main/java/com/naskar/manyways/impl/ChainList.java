@@ -1,6 +1,8 @@
 package com.naskar.manyways.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,10 +18,13 @@ public class ChainList implements Chain {
 	private HttpServletRequest req; 
 	private HttpServletResponse res;
 	
+	private Map<String, Object> headers;
+	
 	public ChainList(List<Handler> handlers, HttpServletRequest req, HttpServletResponse res) {
 		this.handlers = handlers;
 		this.req = req;
 		this.res = res;
+		this.headers = new HashMap<String, Object>();
 	}
 
 	@Override
@@ -33,6 +38,11 @@ public class ChainList implements Chain {
 				throw new RuntimeException(e);
 			}
 		}
+	}
+	
+	@Override
+	public Map<String, Object> getHeaderMap() {
+		return headers;
 	}
 	
 }

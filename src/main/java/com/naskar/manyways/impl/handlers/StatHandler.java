@@ -16,7 +16,7 @@ public class StatHandler implements Handler {
 		
 		time = System.nanoTime() - time;
 		
-		System.out.println(req.getPathInfo() + " Time: " + time);
+		System.out.println(req.getPathInfo() + " Time: [" + time + "] nanos.");
 	}
 
 }

@@ -6,16 +6,18 @@ import org.apache.http.client.fluent.Request;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.naskar.manyways.base.EmbeddedServerTestBase;
 import com.naskar.manyways.impl.ManyWayImpl;
-import com.naskar.manyways.impl.ProxyHttpHandler;
-import com.naskar.manyways.impl.ways.DiscoveryWay;
+import com.naskar.manyways.impl.handlers.ProxyHttpHandler;
+import com.naskar.manyways.impl.handlers.StatHandler;
 import com.naskar.manyways.impl.ways.MappingWay;
 
-public class ManyWayTest extends EmbeddedServerTestBase {
-	
-	//@Test
+public class MappingWayTest extends EmbeddedServerTestBase {
+		
+	@Test
 	public void testMapping() throws Exception {
 		ManyWayImpl manyWay = new ManyWayImpl()
+			.addHandler(new StatHandler())
 			.addWay(new MappingWay()
 						.path("/app")
 						.handlers(Arrays.asList(
@@ -36,28 +38,5 @@ public class ManyWayTest extends EmbeddedServerTestBase {
         
         // Assert
         Assert.assertEquals(expected, actual);
-	}
-	
-	@Test
-	public void testDiscovery() throws Exception {
-		ManyWayImpl manyWay = new ManyWayImpl()
-			.addWay(new DiscoveryWay()
-						.path("/api")
-						.url(getServerUrl() + "/discovery"))
-			;
-		
-		// Arrange
-		String expected = "OK";
-		
-		createServlet("/discovery/*", readFile("testSuccessDiscoveryHandlers.json"));
-		createServlet("/target/api/*", expected);
-		createServlet("/mw/*", manyWay);
-        
-        // Act
-		start();
-        String actual = Request.Get(getServerUrl() + "/mw/api/teste?id=1&tt=2").execute().returnContent().asString();
-        
-        // Assert
-        Assert.assertEquals(expected, actual);
-	}
+	}	
 }

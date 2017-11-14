@@ -1,4 +1,4 @@
-package com.naskar.manyways.impl;
+package com.naskar.manyways.impl.handlers;
 
 import java.io.IOException;
 import java.util.Map;
@@ -13,6 +13,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import com.naskar.manyways.Chain;
 import com.naskar.manyways.Handler;
 import com.naskar.manyways.config.Configurable;
+import com.naskar.manyways.impl.HttpRequestFactory;
 
 public class ProxyHttpHandler implements Handler, Configurable {
 	
@@ -49,7 +50,7 @@ public class ProxyHttpHandler implements Handler, Configurable {
 		CloseableHttpClient client = builder.build();
 		
 		try {
-			handleResponse(client.execute(factory.create(req, prefix, target)), res);
+			handleResponse(client.execute(factory.create(chain, req, prefix, target)), res);
 		} finally {
 			client.close();
 		}
