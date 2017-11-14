@@ -2,6 +2,9 @@ package com.naskar.manyways.impl.ways;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.naskar.manyways.Handler;
 import com.naskar.manyways.Way;
 
@@ -26,7 +29,7 @@ public class MappingWay implements Way {
 	}
 
 	@Override
-	public List<Handler> resolveHandlers() {
+	public List<Handler> resolveHandlers(HttpServletRequest req, HttpServletResponse res) {
 		return this.handlers;
 	}
 

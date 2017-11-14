@@ -1,0 +1,14 @@
+{
+	"handlers": [
+		{
+			"type": "authentication",
+			"params": {
+				"validate": "http://localhost:9021/target/auth/validate",
+				"redirect": "http://localhost:9021/target/auth/login"
+			}
+		},
+		{
+			"type": "proxy_http"
+		}
+	]
+}

@@ -28,7 +28,7 @@ public class DefaultManyWayExecutor implements ManyWayExecutor {
 		List<Way> ways = manyWay.resolveWays();
 		for (Way w : ways) {
 			if (path.startsWith(w.getPath())) {
-				handlers.addAll(w.resolveHandlers());
+				handlers.addAll(w.resolveHandlers(req, res));
 			}
 		}
 		
