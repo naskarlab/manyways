@@ -1,4 +1,6 @@
-package com.naskar.manyways.impl.handlers;
+package com.naskar.manyways.impl.handlers.metrics;
+
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -6,7 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.naskar.manyways.Chain;
 import com.naskar.manyways.Handler;
 
-public class StatHandler implements Handler {
+public class SimpleTimeRequestLoggerHandler implements Handler {
+	
+	private static final Logger LOGGER = Logger.getLogger(SimpleTimeRequestLoggerHandler.class.getName());
 
 	@Override
 	public void handle(Chain chain, HttpServletRequest req, HttpServletResponse res) throws Exception {
@@ -16,7 +20,7 @@ public class StatHandler implements Handler {
 		
 		time = System.nanoTime() - time;
 		
-		System.out.println(req.getPathInfo() + " Time: [" + time + "] nanos.");
+		LOGGER.info("Request: [" + req.getRequestURI() + "], Time: [" + time + "] nanos.");
 	}
 
 }

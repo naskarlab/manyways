@@ -7,7 +7,7 @@ import org.junit.Test;
 import com.naskar.manyways.base.EmbeddedServerTestBase;
 import com.naskar.manyways.base.Holder;
 import com.naskar.manyways.impl.ManyWayImpl;
-import com.naskar.manyways.impl.handlers.StatHandler;
+import com.naskar.manyways.impl.handlers.metrics.SimpleTimeRequestLoggerHandler;
 import com.naskar.manyways.impl.ways.DiscoveryWay;
 
 public class AuthCheckHandlerTest extends EmbeddedServerTestBase {
@@ -15,7 +15,7 @@ public class AuthCheckHandlerTest extends EmbeddedServerTestBase {
 	@Test
 	public void testAuthValid() throws Exception {
 		ManyWayImpl manyWay = new ManyWayImpl()
-			.addHandler(new StatHandler())
+			.addHandler(new SimpleTimeRequestLoggerHandler())
 			.addWay(new DiscoveryWay()
 						.path("/api")
 						.url(getServerUrl() + "/discovery"))
@@ -51,7 +51,7 @@ public class AuthCheckHandlerTest extends EmbeddedServerTestBase {
 	@Test
 	public void testAuthInvalid() throws Exception {
 		ManyWayImpl manyWay = new ManyWayImpl()
-			.addHandler(new StatHandler())
+			.addHandler(new SimpleTimeRequestLoggerHandler())
 			.addWay(new DiscoveryWay()
 						.path("/api")
 						.url(getServerUrl() + "/discovery"))

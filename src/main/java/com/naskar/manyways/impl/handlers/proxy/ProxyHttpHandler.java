@@ -1,4 +1,4 @@
-package com.naskar.manyways.impl.handlers;
+package com.naskar.manyways.impl.handlers.proxy;
 
 import java.io.IOException;
 import java.util.Map;

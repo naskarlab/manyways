@@ -1,4 +1,4 @@
-package com.naskar.manyways.impl.handlers;
+package com.naskar.manyways.impl.handlers.auth;
 
 import java.lang.reflect.Type;
 import java.util.Map;

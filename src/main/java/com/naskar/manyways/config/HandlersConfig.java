@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.naskar.manyways.Handler;
-import com.naskar.manyways.impl.handlers.AuthCheckHandler;
-import com.naskar.manyways.impl.handlers.ProxyHttpHandler;
+import com.naskar.manyways.impl.handlers.auth.AuthCheckHandler;
+import com.naskar.manyways.impl.handlers.proxy.ProxyHttpHandler;
 
 public class HandlersConfig {
 	

@@ -53,6 +53,10 @@ public class EmbeddedServerTestBase {
 		return serverUrl;
 	}
 	
+	protected Tomcat getEmbeddedServer() {
+		return tomcat;
+	}
+	
 	protected static void start() {
 		try {
 			tomcat.start();

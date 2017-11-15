@@ -8,8 +8,8 @@ import org.junit.Test;
 
 import com.naskar.manyways.base.EmbeddedServerTestBase;
 import com.naskar.manyways.impl.ManyWayImpl;
-import com.naskar.manyways.impl.handlers.ProxyHttpHandler;
-import com.naskar.manyways.impl.handlers.StatHandler;
+import com.naskar.manyways.impl.handlers.metrics.SimpleTimeRequestLoggerHandler;
+import com.naskar.manyways.impl.handlers.proxy.ProxyHttpHandler;
 import com.naskar.manyways.impl.ways.MappingWay;
 
 public class MappingWayTest extends EmbeddedServerTestBase {
@@ -17,7 +17,7 @@ public class MappingWayTest extends EmbeddedServerTestBase {
 	@Test
 	public void testMapping() throws Exception {
 		ManyWayImpl manyWay = new ManyWayImpl()
-			.addHandler(new StatHandler())
+			.addHandler(new SimpleTimeRequestLoggerHandler())
 			.addWay(new MappingWay()
 						.path("/app")
 						.handlers(Arrays.asList(
