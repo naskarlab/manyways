@@ -1,6 +1,5 @@
 package com.naskar.manyways.impl;
 
-import java.net.URI;
 import java.util.Enumeration;
 import java.util.Map.Entry;
 
@@ -17,7 +16,7 @@ public class HttpRequestFactory {
 	
 	public HttpUriRequest create(Chain chain, HttpServletRequest req, String prefix, String target) throws Exception {
 		
-		HttpUriRequest request = newRequest(rewrite(req, prefix, target), req);
+		HttpUriRequest request = newRequest(Util.rewrite(req, prefix, target), req);
 		
 		copyRequestHeaders(req, request);
 		copyChainHeaders(chain, request);
@@ -62,29 +61,6 @@ public class HttpRequestFactory {
 			default:
 				throw new RuntimeException("NotImplementedYet");
 		}
-	}
-	
-	// TODO: util
-	public static String rewrite(HttpServletRequest request, String prefix, String proxyTo) {
-		
-		String path = request.getRequestURI();
-
-		StringBuilder uri = new StringBuilder(proxyTo);
-
-		String rest = path.substring((request.getServletPath() + prefix).length());
-		if(!rest.isEmpty()) {
-			uri.append(rest);
-		}
-
-		String query = request.getQueryString();
-		if (query != null) {
-			String separator = "://";
-			if (uri.indexOf("/", uri.indexOf(separator) + separator.length()) < 0)
-				uri.append("/");
-			uri.append("?").append(query);
-		}
-
-		return URI.create(uri.toString()).normalize().toString();
 	}
 	
 }

@@ -1,30 +1,21 @@
 package com.naskar.manyways;
 
-import java.util.Arrays;
-
 import org.apache.http.client.fluent.Request;
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.naskar.manyways.base.EmbeddedServerTestBase;
 import com.naskar.manyways.impl.ManyWayImpl;
-import com.naskar.manyways.impl.handlers.metrics.SimpleTimeRequestLoggerHandler;
 import com.naskar.manyways.impl.handlers.proxy.StandardProxyHttpHandler;
-import com.naskar.manyways.impl.ways.MappingWay;
 
-public class MappingWayStandardTest extends EmbeddedServerTestBase {
+public class StandardProxyHttpTest extends EmbeddedServerTestBase {
 	
 	@Test
-	public void testMappingStandardProxy() throws Exception {
+	public void testStandardProxyHttpHandler() throws Exception {
 		ManyWayImpl manyWay = new ManyWayImpl()
-			.addHandler(new SimpleTimeRequestLoggerHandler())
-			.addWay(new MappingWay()
-						.path("/app")
-						.handlers(Arrays.asList(
-							new StandardProxyHttpHandler()
-								.prefix("/app")
-								.target(getServerUrl() + "/target/app"))))
-			;
+			.addHandler(new StandardProxyHttpHandler()
+					.prefix("/app")
+					.target(getServerUrl() + "/target/app"));
 		
 		// Arrange
 		String expected = "OK";

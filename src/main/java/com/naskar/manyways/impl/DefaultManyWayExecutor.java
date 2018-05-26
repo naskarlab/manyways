@@ -25,6 +25,9 @@ public class DefaultManyWayExecutor implements ManyWayExecutor {
 		List<Handler> handlers = new ArrayList<Handler>(manyWay.resolveHandlers());
 		
 		String path = req.getPathInfo();
+		if(path == null) {
+			path = "/";
+		}
 		List<Way> ways = manyWay.resolveWays();
 		for (Way w : ways) {
 			if (path.startsWith(w.getPath())) {
@@ -32,8 +35,12 @@ public class DefaultManyWayExecutor implements ManyWayExecutor {
 			}
 		}
 		
-		Chain chain = new ChainList(handlers, req, res);
-		chain.next();
+		if(!handlers.isEmpty()) {
+			Chain chain = new ChainList(handlers, req, res);
+			chain.next();
+		} else {
+			res.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}
 	}
 
 }
