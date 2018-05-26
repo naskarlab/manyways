@@ -9,19 +9,19 @@ import org.junit.Test;
 import com.naskar.manyways.base.EmbeddedServerTestBase;
 import com.naskar.manyways.impl.ManyWayImpl;
 import com.naskar.manyways.impl.handlers.metrics.SimpleTimeRequestLoggerHandler;
-import com.naskar.manyways.impl.handlers.proxy.ProxyHttpHandler;
+import com.naskar.manyways.impl.handlers.proxy.StandardProxyHttpHandler;
 import com.naskar.manyways.impl.ways.MappingWay;
 
-public class MappingWayTest extends EmbeddedServerTestBase {
-		
+public class MappingWayStandardTest extends EmbeddedServerTestBase {
+	
 	@Test
-	public void testMapping() throws Exception {
+	public void testMappingStandardProxy() throws Exception {
 		ManyWayImpl manyWay = new ManyWayImpl()
 			.addHandler(new SimpleTimeRequestLoggerHandler())
 			.addWay(new MappingWay()
 						.path("/app")
 						.handlers(Arrays.asList(
-							new ProxyHttpHandler()
+							new StandardProxyHttpHandler()
 								.prefix("/app")
 								.target(getServerUrl() + "/target/app"))))
 			;
@@ -39,5 +39,4 @@ public class MappingWayTest extends EmbeddedServerTestBase {
         // Assert
         Assert.assertEquals(expected, actual);
 	}
-	
 }

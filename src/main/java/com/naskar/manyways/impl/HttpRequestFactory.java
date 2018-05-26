@@ -64,7 +64,8 @@ public class HttpRequestFactory {
 		}
 	}
 	
-	private String rewrite(HttpServletRequest request, String prefix, String proxyTo) {
+	// TODO: util
+	public static String rewrite(HttpServletRequest request, String prefix, String proxyTo) {
 		
 		String path = request.getRequestURI();
 
