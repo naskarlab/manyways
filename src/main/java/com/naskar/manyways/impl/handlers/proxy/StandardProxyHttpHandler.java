@@ -59,8 +59,6 @@ public class StandardProxyHttpHandler implements Handler, Configurable {
 		con.setRequestProperty("Host", url.getHost());
 		debug("Host:" + url.getHost());
 		
-		con.connect();
-		
 		copyRequestBody(req, con);
 		
 		res.setStatus(con.getResponseCode());
@@ -119,6 +117,6 @@ public class StandardProxyHttpHandler implements Handler, Configurable {
 	}
 	
 	private void debug(String msg) {
-		System.out.println(msg);
+		//System.out.println(msg);
 	}
 }
