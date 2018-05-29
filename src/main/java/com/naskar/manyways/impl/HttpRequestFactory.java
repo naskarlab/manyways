@@ -1,5 +1,6 @@
 package com.naskar.manyways.impl;
 
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.Map.Entry;
 
@@ -16,10 +17,13 @@ public class HttpRequestFactory {
 	
 	public HttpUriRequest create(Chain chain, HttpServletRequest req, String prefix, String target) throws Exception {
 		
-		HttpUriRequest request = newRequest(Util.rewrite(req, prefix, target), req);
+		String url = Util.rewrite(req, prefix, target);
+		HttpUriRequest request = newRequest(url, req);
 		
 		copyRequestHeaders(req, request);
 		copyChainHeaders(chain, request);
+		
+		request.setHeader("Host", new URL(url).getHost());
 				
 		/* TODO: proxy
 		proxyRequest.header(HttpHeader.VIA, "http/1.1 " + getViaHost());

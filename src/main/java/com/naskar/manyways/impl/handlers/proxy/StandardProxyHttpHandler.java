@@ -91,11 +91,12 @@ public class StandardProxyHttpHandler implements Handler, Configurable {
 		}
 		
 		con.setDoOutput(true);
-		copy(req.getInputStream(), con.getOutputStream());
+		OutputStream out = con.getOutputStream();
+		copy(req.getInputStream(), out);
+		out.close();
 	}
 
 	private void copyResponseHeader(HttpURLConnection con, HttpServletResponse res) {
-		
 		for (Map.Entry<String, List<String>> e : con.getHeaderFields().entrySet()) {
 			for (String v : e.getValue()) {
 				res.addHeader(e.getKey(), v);
@@ -105,7 +106,9 @@ public class StandardProxyHttpHandler implements Handler, Configurable {
 	}
 
 	private void copyResponseBody(HttpURLConnection con, HttpServletResponse res) throws IOException {
-		copy(con.getInputStream(), res.getOutputStream());
+		InputStream in = con.getInputStream(); 
+		copy(in, res.getOutputStream());
+		in.close();
 	}
 
 	private void copy(final InputStream in, final OutputStream out) throws IOException {
@@ -113,7 +116,6 @@ public class StandardProxyHttpHandler implements Handler, Configurable {
 		for (int r; (r = in.read(b)) != -1;) {
 			out.write(b, 0, r);
 		}
-		out.flush();
 	}
 	
 	private void debug(String msg) {

@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -60,7 +61,10 @@ public class ProxyHttpHandler implements Handler, Configurable {
 
 	protected void handleResponse(CloseableHttpResponse response, HttpServletResponse res) throws IOException {
 		try {
-			response.getEntity().writeTo(res.getOutputStream());
+			HttpEntity entity = response.getEntity();
+			if(entity != null) {
+				entity.writeTo(res.getOutputStream());	
+			}
 		} finally {
 			response.close();
 		}
