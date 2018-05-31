@@ -26,7 +26,7 @@ public class SingleTarget implements HttpURLConnectionFactory {
 	@Override
 	public URLConnectionContext create(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		URL url = new URL(Util.rewrite(req, prefix, target));
-		return new URLConnectionContext(url, (HttpURLConnection) url.openConnection());
+		return new URLConnectionContext(url, (HttpURLConnection) url.openConnection(), res);
 	}
 
 }

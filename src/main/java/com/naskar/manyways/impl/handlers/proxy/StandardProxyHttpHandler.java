@@ -52,9 +52,12 @@ public class StandardProxyHttpHandler implements Handler {
 		
 		res.setStatus(con.getResponseCode());
 		debug("Status:" + con.getResponseCode());
-
+		
 		copyResponseHeader(con, res);
+		ctx.fireEndHeaderResponse();
+		
 		copyResponseBody(con, res);
+		ctx.fireEndBodyResponse();
 
 		chain.next();
 	}
