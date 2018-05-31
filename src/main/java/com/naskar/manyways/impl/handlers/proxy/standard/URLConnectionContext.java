@@ -3,12 +3,12 @@ package com.naskar.manyways.impl.handlers.proxy.standard;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class FactoryContext {
+public class URLConnectionContext {
 
 	private URL url;
 	private HttpURLConnection connection;
 
-	public FactoryContext(URL url, HttpURLConnection connection) {
+	public URLConnectionContext(URL url, HttpURLConnection connection) {
 		this.url = url;
 		this.connection = connection;
 	}

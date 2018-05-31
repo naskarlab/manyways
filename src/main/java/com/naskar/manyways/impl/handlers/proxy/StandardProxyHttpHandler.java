@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.naskar.manyways.Chain;
 import com.naskar.manyways.Handler;
-import com.naskar.manyways.impl.handlers.proxy.standard.FactoryContext;
 import com.naskar.manyways.impl.handlers.proxy.standard.HttpURLConnectionFactory;
+import com.naskar.manyways.impl.handlers.proxy.standard.URLConnectionContext;
 
 public class StandardProxyHttpHandler implements Handler {
 	
@@ -32,7 +32,7 @@ public class StandardProxyHttpHandler implements Handler {
 	@Override
 	public void handle(Chain chain, HttpServletRequest req, HttpServletResponse res) throws Exception {
 
-		FactoryContext ctx = factory.create(req);
+		URLConnectionContext ctx = factory.create(req, res);
 		HttpURLConnection con = ctx.getConnection();
 		URL url = ctx.getUrl();
 

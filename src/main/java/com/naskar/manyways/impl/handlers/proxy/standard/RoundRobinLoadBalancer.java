@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.naskar.manyways.impl.Util;
 
@@ -33,7 +34,7 @@ public class RoundRobinLoadBalancer implements HttpURLConnectionFactory {
 	}
 	
 	@Override
-	public FactoryContext create(HttpServletRequest req) throws Exception {
+	public URLConnectionContext create(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		
 		URL url = null;
 		HttpURLConnection connection = null;
@@ -62,7 +63,7 @@ public class RoundRobinLoadBalancer implements HttpURLConnectionFactory {
 			throw lastException;
 		}
 		
-		return new FactoryContext(url, connection);
+		return new URLConnectionContext(url, connection);
 	}
 	
 }

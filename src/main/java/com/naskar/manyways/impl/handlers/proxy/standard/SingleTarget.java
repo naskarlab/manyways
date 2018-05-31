@@ -4,6 +4,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.naskar.manyways.impl.Util;
 
@@ -23,9 +24,9 @@ public class SingleTarget implements HttpURLConnectionFactory {
 	}
 	
 	@Override
-	public FactoryContext create(HttpServletRequest req) throws Exception {
+	public URLConnectionContext create(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		URL url = new URL(Util.rewrite(req, prefix, target));
-		return new FactoryContext(url, (HttpURLConnection) url.openConnection());
+		return new URLConnectionContext(url, (HttpURLConnection) url.openConnection());
 	}
 
 }
