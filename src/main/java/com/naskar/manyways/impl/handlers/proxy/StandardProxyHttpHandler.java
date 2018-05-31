@@ -15,37 +15,26 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.naskar.manyways.Chain;
 import com.naskar.manyways.Handler;
-import com.naskar.manyways.config.Configurable;
-import com.naskar.manyways.impl.Util;
+import com.naskar.manyways.impl.handlers.proxy.standard.FactoryContext;
+import com.naskar.manyways.impl.handlers.proxy.standard.HttpURLConnectionFactory;
 
-public class StandardProxyHttpHandler implements Handler, Configurable {
+public class StandardProxyHttpHandler implements Handler {
 	
 	protected static final List<String> noBodyMethodCopy = Arrays.asList("GET", "HEAD", "DELETE", "TRACE");
 	
-	private String prefix;
-	private String target;
-
-	public StandardProxyHttpHandler prefix(String value) {
-		this.prefix = value;
+	private HttpURLConnectionFactory factory;
+	
+	public StandardProxyHttpHandler factory(HttpURLConnectionFactory factory) {
+		this.factory = factory;
 		return this;
-	}
-
-	public StandardProxyHttpHandler target(String value) {
-		this.target = value;
-		return this;
-	}
-
-	@Override
-	public void configureParameters(Map<String, Object> params) {
-		prefix((String) params.get("prefix"));
-		target((String) params.get("target"));
 	}
 
 	@Override
 	public void handle(Chain chain, HttpServletRequest req, HttpServletResponse res) throws Exception {
 
-		URL url = new URL(Util.rewrite(req, prefix, target));
-		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		FactoryContext ctx = factory.create(req);
+		HttpURLConnection con = ctx.getConnection();
+		URL url = ctx.getUrl();
 
 		// TODO: timeout
 		con.setConnectTimeout(30 * 1000);
@@ -106,8 +95,9 @@ public class StandardProxyHttpHandler implements Handler, Configurable {
 	}
 
 	private void copyResponseBody(HttpURLConnection con, HttpServletResponse res) throws IOException {
-		InputStream in = con.getInputStream(); 
-		copy(in, res.getOutputStream());
+		InputStream in = con.getInputStream();
+		OutputStream out = res.getOutputStream();
+		copy(in, out);
 		in.close();
 	}
 
@@ -116,6 +106,7 @@ public class StandardProxyHttpHandler implements Handler, Configurable {
 		for (int r; (r = in.read(b)) != -1;) {
 			out.write(b, 0, r);
 		}
+		out.flush();
 	}
 	
 	private void debug(String msg) {
