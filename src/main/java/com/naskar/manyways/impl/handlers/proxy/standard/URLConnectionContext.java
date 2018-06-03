@@ -21,7 +21,7 @@ public class URLConnectionContext {
 		this.connection = connection;
 		this.response = response;
 	}
-
+	
 	public URL getUrl() {
 		return url;
 	}

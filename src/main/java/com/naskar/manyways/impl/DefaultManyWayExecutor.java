@@ -24,13 +24,13 @@ public class DefaultManyWayExecutor implements ManyWayExecutor {
 		
 		List<Handler> handlers = new ArrayList<Handler>(manyWay.resolveHandlers());
 		
-		String path = req.getPathInfo();
-		if(path == null) {
-			path = "/";
+		String uri = req.getRequestURI();
+		if(uri == null) {
+			uri = "/";
 		}
 		List<Way> ways = manyWay.resolveWays();
 		for (Way w : ways) {
-			if (path.startsWith(w.getPath())) {
+			if (uri.startsWith(w.getPath())) {
 				handlers.addAll(w.resolveHandlers(req, res));
 			}
 		}

@@ -34,7 +34,7 @@ public class URLRedirectHandler implements Handler, Configurable {
 	@Override
 	public void handle(Chain chain, HttpServletRequest req, HttpServletResponse res) throws Exception {
         
-        String uri = req.getPathInfo();
+        String uri = req.getRequestURI();
         if(uri != null && uri.startsWith(path)) {
 			res.sendRedirect(Util.rewrite(req, path, target));
 			

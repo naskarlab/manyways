@@ -21,45 +21,58 @@ import com.naskar.manyways.impl.handlers.proxy.standard.URLConnectionContext;
 public class StandardProxyHttpHandler implements Handler {
 	
 	protected static final List<String> noBodyMethodCopy = Arrays.asList("GET", "HEAD", "DELETE", "TRACE");
-	
+
+	private String path;
 	private HttpURLConnectionFactory factory;
 	
 	public StandardProxyHttpHandler factory(HttpURLConnectionFactory factory) {
 		this.factory = factory;
 		return this;
 	}
+	
+	public StandardProxyHttpHandler path(String value) {
+		this.path = value;
+		return this;
+	}
 
 	@Override
 	public void handle(Chain chain, HttpServletRequest req, HttpServletResponse res) throws Exception {
-
-		URLConnectionContext ctx = factory.create(req, res);
-		HttpURLConnection con = ctx.getConnection();
-		URL url = ctx.getUrl();
-
-		// TODO: timeout
-		con.setConnectTimeout(30 * 1000);
-		con.setReadTimeout(30 * 1000);
-
-		con.setRequestMethod(req.getMethod());
-		debug("Method: " + req.getMethod());
-
-		copyRequestHeaders(req, con);
 		
-		con.setRequestProperty("Host", url.getHost());
-		debug("Host:" + url.getHost());
-		
-		copyRequestBody(req, con);
-		
-		res.setStatus(con.getResponseCode());
-		debug("Status:" + con.getResponseCode());
-		
-		copyResponseHeader(con, res);
-		ctx.fireEndHeaderResponse();
-		
-		copyResponseBody(con, res);
-		ctx.fireEndBodyResponse();
+		// TODO: trocar por way
+		String uri = req.getRequestURI();
+        if(uri != null && uri.startsWith(path)) {
 
-		chain.next();
+			URLConnectionContext ctx = factory.create(req, res);
+			HttpURLConnection con = ctx.getConnection();
+			URL url = ctx.getUrl();
+	
+			// TODO: timeout
+			con.setConnectTimeout(30 * 1000);
+			con.setReadTimeout(30 * 1000);
+	
+			con.setRequestMethod(req.getMethod());
+			debug("Method: " + req.getMethod());
+	
+			copyRequestHeaders(req, con);
+			
+			con.setRequestProperty("Host", url.getHost());
+			debug("Host:" + url.getHost());
+			
+			copyRequestBody(req, con);
+			
+			res.setStatus(con.getResponseCode());
+			debug("Status:" + con.getResponseCode());
+			
+			copyResponseHeader(con, res);
+			ctx.fireEndHeaderResponse();
+			
+			copyResponseBody(con, res);
+			ctx.fireEndBodyResponse();
+			
+        } else {
+        	
+        	chain.next();
+        }
 	}
 	
 	private void copyRequestHeaders(HttpServletRequest req, HttpURLConnection con) {

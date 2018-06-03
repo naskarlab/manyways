@@ -13,8 +13,12 @@ public abstract class Util {
 		String path = request.getRequestURI();
 
 		StringBuilder uri = new StringBuilder(proxyTo);
+		String pathInfo = request.getPathInfo();
+		if(pathInfo == null) {
+			pathInfo = "";
+		}
 
-		String rest = path.substring((request.getServletPath() + prefix).length());
+		String rest = path.startsWith(prefix) ? path.substring(prefix.length()) : "";
 		if(!rest.isEmpty()) {
 			uri.append(rest);
 		}

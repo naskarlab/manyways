@@ -26,7 +26,7 @@ public class HttpToHttpsRedirectHandler implements Handler, Configurable {
 	@Override
 	public void handle(Chain chain, HttpServletRequest req, HttpServletResponse res) throws Exception {
 
-		String uri = req.getPathInfo();
+		String uri = req.getRequestURI();
         if(uri != null && uri.startsWith(path) && !req.isSecure()) {
 
 			StringBuilder newUrl = new StringBuilder("https://");
