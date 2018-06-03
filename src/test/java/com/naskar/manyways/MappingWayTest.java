@@ -14,7 +14,7 @@ public class MappingWayTest extends EmbeddedServerTestBase {
 	public void testMapping() throws Exception {
 		ManyWayImpl manyWay = new ManyWayImpl()
 			.addHandler(new ProxyHttpHandler()
-							.prefix("/app")
+							.prefix("/mw/app")
 							.target(getServerUrl() + "/target/app"))
 			;
 		

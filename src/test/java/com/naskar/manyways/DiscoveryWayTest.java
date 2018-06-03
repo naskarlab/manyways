@@ -16,7 +16,7 @@ public class DiscoveryWayTest extends EmbeddedServerTestBase {
 		ManyWayImpl manyWay = new ManyWayImpl()
 			.addHandler(new SimpleTimeRequestLoggerHandler())
 			.addWay(new DiscoveryWay()
-						.path("/api")
+						.path("/mw/api")
 						.url(getServerUrl() + "/discovery"))
 			;
 		

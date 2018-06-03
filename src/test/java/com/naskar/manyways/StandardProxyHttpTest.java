@@ -20,9 +20,11 @@ public class StandardProxyHttpTest extends EmbeddedServerTestBase {
 	@Test
 	public void testSuccessHandler() throws Exception {
 		ManyWayImpl manyWay = new ManyWayImpl()
-			.addHandler(new StandardProxyHttpHandler().factory(new SingleTarget()
-					.prefix("/app")
-					.target(getServerUrl() + "/target/app")));
+			.addHandler(new StandardProxyHttpHandler()
+					.path("/mw/app")
+					.factory(new SingleTarget()
+							.prefix("/mw/app")
+							.target(getServerUrl() + "/target/app")));
 		
 		// Arrange
 		String expected = "OK";
@@ -42,12 +44,13 @@ public class StandardProxyHttpTest extends EmbeddedServerTestBase {
 	public void testSuccessLoadBalancer() throws Exception {
 		
 		ManyWayImpl manyWay = new ManyWayImpl()
-			.addHandler(new StandardProxyHttpHandler().factory(
-					new RoundRobinLoadBalancer()
-						.prefix("/app")
-						.addTarget(getServerUrl() + "/target/app")
-						.addTarget("http://127.0.0.1:8099/naoexiste/app")
-					));
+			.addHandler(new StandardProxyHttpHandler()
+						.path("/mw/app")
+						.factory(new RoundRobinLoadBalancer()
+								.prefix("/mw/app")
+								.addTarget(getServerUrl() + "/target/app")
+								.addTarget("http://127.0.0.1:8099/naoexiste/app")
+						));
 		
 		// Arrange
 		String expected = "OK";
@@ -67,12 +70,13 @@ public class StandardProxyHttpTest extends EmbeddedServerTestBase {
 	public void testSucessTwoRequestLoadBalancer() throws Exception {
 		
 		ManyWayImpl manyWay = new ManyWayImpl()
-			.addHandler(new StandardProxyHttpHandler().factory(
-					new RoundRobinLoadBalancer()
-						.prefix("/app")
-						.addTarget(getServerUrl() + "/target/app")
-						.addTarget("http://127.0.0.1:8099/naoexiste/app")
-					));
+			.addHandler(new StandardProxyHttpHandler()
+						.path("/mw/app")
+						.factory(new RoundRobinLoadBalancer()
+								.prefix("/mw/app")
+								.addTarget(getServerUrl() + "/target/app")
+								.addTarget("http://127.0.0.1:8099/naoexiste/app")
+							));
 		
 		// Arrange
 		String expected = "OK";
@@ -99,12 +103,13 @@ public class StandardProxyHttpTest extends EmbeddedServerTestBase {
 	public void testFailedRequestLoadBalancer() throws Exception {
 		
 		ManyWayImpl manyWay = new ManyWayImpl()
-			.addHandler(new StandardProxyHttpHandler().factory(
-					new RoundRobinLoadBalancer()
-						.prefix("/app")
-						.addTarget("http://127.0.0.1:8099/naoexiste/app")
-						.addTarget("http://127.0.0.1:8100/naoexiste/app")
-					));
+			.addHandler(new StandardProxyHttpHandler()
+						.path("/mw/app")
+						.factory(new RoundRobinLoadBalancer()
+								.prefix("/mw/app")
+								.addTarget("http://127.0.0.1:8099/naoexiste/app")
+								.addTarget("http://127.0.0.1:8100/naoexiste/app")
+						));
 		
 		// Arrange
 		createServlet("/mw/*", manyWay);
@@ -120,13 +125,14 @@ public class StandardProxyHttpTest extends EmbeddedServerTestBase {
 	public void testStickyLoadBalancer() throws Exception {
 		
 		ManyWayImpl manyWay = new ManyWayImpl()
-			.addHandler(new StandardProxyHttpHandler().factory(
-					new RoundRobinLoadBalancer()
-						.prefix("/app")
-						.sticky()
-						.addTarget(getServerUrl() + "/target1/app")
-						.addTarget(getServerUrl() + "/target2/app")
-					));
+			.addHandler(new StandardProxyHttpHandler()
+						.path("/mw/app")
+						.factory(new RoundRobinLoadBalancer()
+								.prefix("/mw/app")
+								.sticky()
+								.addTarget(getServerUrl() + "/target1/app")
+								.addTarget(getServerUrl() + "/target2/app")
+						));
 		
 		// Arrange
 		String expected1 = "OK1";

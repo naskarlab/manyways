@@ -37,7 +37,7 @@ public class RedirectTest extends EmbeddedServerTestBase {
 	public void testURLRedirectHandler() throws Exception {
 		ManyWayImpl manyWay = new ManyWayImpl()
 				.addHandler(new URLRedirectHandler()
-					.path("/app")
+					.path("/mw/app")
 					.target(getServerUrl() + "/target/app"));
 		
 		// Arrange
