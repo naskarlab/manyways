@@ -79,7 +79,7 @@ public class RoundRobinLoadBalancer implements HttpURLConnectionFactory {
 			
 			url = new URL(Util.rewrite(req, prefix, target));
 			try {
-				url.openStream().close();
+				tryRequest(url);
 				connection = (HttpURLConnection) url.openConnection();
 				found = true;
 				
@@ -101,6 +101,15 @@ public class RoundRobinLoadBalancer implements HttpURLConnectionFactory {
 		ctx.setEndHeaderResponse((c) -> updateStickyResponse(c, holderTargetIndex.value));
 		
 		return ctx;
+	}
+
+	private void tryRequest(URL url) throws IOException {
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.getInputStream();
+		int status = con.getResponseCode();
+		if(status > 500) {
+			throw new IOException("Serviço indisponível.");
+		}
 	}
 
 	private StickyContext findSticky(AtomicInteger findIndex, HttpServletRequest req) {
