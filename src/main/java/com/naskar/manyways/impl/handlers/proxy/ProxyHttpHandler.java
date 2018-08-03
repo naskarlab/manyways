@@ -48,15 +48,19 @@ public class ProxyHttpHandler implements Handler, Configurable {
 	@Override
 	public void handle(Chain chain, HttpServletRequest req, HttpServletResponse res) throws Exception {
 		
-		CloseableHttpClient client = builder.build();
+		String uri = req.getRequestURI();
+        if(uri != null && uri.startsWith(prefix)) {
 		
-		try {
-			handleResponse(client.execute(factory.create(chain, req, prefix, target)), res);
-		} finally {
-			client.close();
-		}
-		
-		chain.next();
+			CloseableHttpClient client = builder.build();
+			
+			try {
+				handleResponse(client.execute(factory.create(chain, req, prefix, target)), res);
+			} finally {
+				client.close();
+			}
+        } else {
+        	chain.next();
+        }
 	}
 
 	protected void handleResponse(CloseableHttpResponse response, HttpServletResponse res) throws IOException {
