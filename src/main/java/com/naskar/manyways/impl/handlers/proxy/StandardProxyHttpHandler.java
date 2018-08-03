@@ -7,8 +7,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +22,14 @@ import com.naskar.manyways.impl.handlers.proxy.standard.URLConnectionContext;
 
 public class StandardProxyHttpHandler implements Handler {
 	
-	protected static final List<String> noBodyMethodCopy = Arrays.asList("GET", "HEAD", "DELETE", "TRACE");
+	protected static final Set<String> noBodyMethodCopy = new HashSet<String>(Arrays.asList(
+		"GET", "HEAD", "DELETE", "TRACE"
+	));
+	
+	protected static final Set<String> hopByHopheaders = new HashSet<String>(Arrays.asList(
+        "Connection", "Keep-Alive", "Proxy-Authenticate", "Proxy-Authorization",
+        "TE", "Trailers", "Transfer-Encoding", "Upgrade"
+	));
 
 	private String path;
 	private HttpURLConnectionFactory factory;
@@ -79,6 +88,10 @@ public class StandardProxyHttpHandler implements Handler {
 		Enumeration<String> headers = req.getHeaderNames();
 		while (headers.hasMoreElements()) {
 			String name = headers.nextElement();
+			
+			if(hopByHopheaders.contains(name)) {
+				continue;
+			}
 			
 			Enumeration<String> values = req.getHeaders(name);
 			while (values.hasMoreElements()) {
