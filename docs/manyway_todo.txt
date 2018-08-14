@@ -1,7 +1,7 @@
 Proxy OK
 Authentication OK
-Redirect
-Load Balance
+Redirect OK
+Load Balance OK
 Dashboard
 Metrics and Stats
-Logger
+Logger OK
