@@ -7,10 +7,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.BiConsumer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,6 +36,8 @@ public class StandardProxyHttpHandler implements Handler {
 
 	private String path;
 	private HttpURLConnectionFactory factory;
+	private Map<String, String> headers;
+	private BiConsumer<HttpServletRequest, HttpURLConnection> configureAction;
 	
 	public StandardProxyHttpHandler factory(HttpURLConnectionFactory factory) {
 		this.factory = factory;
@@ -41,6 +46,20 @@ public class StandardProxyHttpHandler implements Handler {
 	
 	public StandardProxyHttpHandler path(String value) {
 		this.path = value;
+		return this;
+	}
+	
+	public StandardProxyHttpHandler header(String key, String value) {
+		if(headers == null) {
+			headers = new HashMap<String, String>();
+		}
+		headers.put(key, value);
+		return this;
+	}
+	
+	
+	public StandardProxyHttpHandler configure(BiConsumer<HttpServletRequest, HttpURLConnection> configureAction) {
+		this.configureAction = configureAction;
 		return this;
 	}
 
@@ -63,6 +82,9 @@ public class StandardProxyHttpHandler implements Handler {
 			debug("Method: " + req.getMethod());
 	
 			copyRequestHeaders(req, con);
+			configureCustomHeaders(con);
+			
+			executeConfigure(req, con);
 			
 			con.setRequestProperty("Host", url.getHost());
 			debug("Host:" + url.getHost());
@@ -84,6 +106,12 @@ public class StandardProxyHttpHandler implements Handler {
         }
 	}
 	
+	private void executeConfigure(HttpServletRequest req, HttpURLConnection con) {
+		if(configureAction != null) {
+			configureAction.accept(req, con);
+		}
+	}
+
 	private void copyRequestHeaders(HttpServletRequest req, HttpURLConnection con) {
 		Enumeration<String> headers = req.getHeaderNames();
 		while (headers.hasMoreElements()) {
@@ -100,6 +128,15 @@ public class StandardProxyHttpHandler implements Handler {
 				debug(name + ":" + value);
 			}
 
+		}
+	}
+	
+	private void configureCustomHeaders(HttpURLConnection con) {
+		if(headers != null) {
+			for(Entry<String, String> e : headers.entrySet()) {
+				con.addRequestProperty(e.getKey(), e.getValue());
+				debug(e.getKey() + ":" + e.getValue());		
+			}
 		}
 	}
 	
