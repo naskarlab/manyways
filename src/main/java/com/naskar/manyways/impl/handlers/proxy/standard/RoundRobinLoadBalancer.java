@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,8 @@ import com.naskar.manyways.impl.Holder;
 import com.naskar.manyways.impl.Util;
 
 public class RoundRobinLoadBalancer implements HttpURLConnectionFactory {
+	
+	private static Logger logger = Logger.getLogger(RoundRobinLoadBalancer.class.getName());
 	
 	private String prefix;
 	private List<String> targets;
@@ -86,8 +89,7 @@ public class RoundRobinLoadBalancer implements HttpURLConnectionFactory {
 				updateSticky(stickyContext, targetIndex, res);
 				
 			} catch(IOException e) {
-				// TODO: logger
-				e.printStackTrace();
+				logger.warning("ERROR: " + e.getMessage() + " tryng other...");
 				lastException = e;
 			}
 			
@@ -107,8 +109,8 @@ public class RoundRobinLoadBalancer implements HttpURLConnectionFactory {
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.getInputStream();
 		int status = con.getResponseCode();
-		if(status > 500) {
-			throw new IOException("Serviço indisponível.");
+		if(status >= 500) {
+			throw new IOException("Serviço indisponível: " + status + " " + url.toString());
 		}
 	}
 

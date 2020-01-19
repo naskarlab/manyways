@@ -65,6 +65,16 @@ public class EmbeddedServerTestBase {
 		}
 	}
 	
+	protected BiConsumer<HttpServletRequest, HttpServletResponse> error500() {
+		return (HttpServletRequest req, HttpServletResponse res) -> {
+			try {
+				res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			} catch (IOException e) {
+				// @ignore
+			}
+		};
+	}
+	
 	protected void createServlet(String path, final BiConsumer<HttpServletRequest, HttpServletResponse> call) {
         Tomcat.addServlet(ctx, "target-" + System.nanoTime() + "-" + call.hashCode(), new HttpServlet() {
         	

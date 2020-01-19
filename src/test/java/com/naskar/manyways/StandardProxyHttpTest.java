@@ -48,8 +48,9 @@ public class StandardProxyHttpTest extends EmbeddedServerTestBase {
 						.path("/mw/app")
 						.factory(new RoundRobinLoadBalancer()
 								.prefix("/mw/app")
-								.addTarget(getServerUrl() + "/target/app")
+								.addTarget(getServerUrl() + "/error/tt")
 								.addTarget("http://127.0.0.1:8099/naoexiste/app")
+								.addTarget(getServerUrl() + "/target/app")
 						));
 		
 		// Arrange
@@ -57,6 +58,7 @@ public class StandardProxyHttpTest extends EmbeddedServerTestBase {
 		
 		createServlet("/target/app/*", expected);
 		createServlet("/mw/*", manyWay);
+		createServlet("/error/*", error500());
         
         // Act
 		start();
@@ -74,8 +76,8 @@ public class StandardProxyHttpTest extends EmbeddedServerTestBase {
 						.path("/mw/app")
 						.factory(new RoundRobinLoadBalancer()
 								.prefix("/mw/app")
-								.addTarget(getServerUrl() + "/target/app")
 								.addTarget("http://127.0.0.1:8099/naoexiste/app")
+								.addTarget(getServerUrl() + "/target/app")
 							));
 		
 		// Arrange
