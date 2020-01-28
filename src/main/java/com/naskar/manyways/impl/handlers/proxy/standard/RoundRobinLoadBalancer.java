@@ -119,6 +119,7 @@ public class RoundRobinLoadBalancer implements HttpURLConnectionFactory {
 		ctx.findIndex = findIndex;
 		
 		if(!sticky) {
+			ctx.findIndex = new AtomicInteger(-1);
 			return ctx;
 		}
 		
