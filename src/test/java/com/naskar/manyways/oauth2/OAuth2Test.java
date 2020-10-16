@@ -26,8 +26,8 @@
 //				OAuthClientRequest request = OAuthClientRequest
 //	                .tokenLocation("https://www.googleapis.com/oauth2/v4/token")
 //	                .setGrantType(GrantType.AUTHORIZATION_CODE)
-//	                .setClientId("530011801167-8n1afrtec2q7mac6o8po5mq782f4ve84.apps.googleusercontent.com")
-//	                .setClientSecret("OMx6F9amqqrLtDuhcy96mOuE")
+//	                .setClientId("")
+//	                .setClientSecret("")
 //	                .setRedirectURI(getServerUrl() + "/app/oauth2/callback")
 //	                .setCode(code)
 //	                .setParameter("access_type", "offline")
@@ -53,7 +53,7 @@
 //			try {
 //				OAuthClientRequest request = OAuthClientRequest
 //						.authorizationLocation("https://accounts.google.com/o/oauth2/v2/auth")
-//						.setClientId("530011801167-8n1afrtec2q7mac6o8po5mq782f4ve84.apps.googleusercontent.com")
+//						.setClientId("")
 //						.setRedirectURI(getServerUrl() + "/app/autorized")
 //						.setResponseType(OAuth.OAUTH_CODE)
 //						.setScope("https://www.googleapis.com/auth/drive.metadata.readonly")
@@ -84,8 +84,8 @@
 //
 //				OAuthClientRequest request = OAuthClientRequest
 //	                .tokenLocation("https://graph.facebook.com/v2.11/oauth/access_token")
-//	                .setClientId("1015110228632117")
-//	                .setClientSecret("4bcb1512d42f81b9c4bd0bd9c08abf42")
+//	                .setClientId("")
+//	                .setClientSecret("")
 //	                .setRedirectURI(getServerUrl() + "/app/autorized")
 //	                .setCode(code)
 //	                .buildBodyMessage()
